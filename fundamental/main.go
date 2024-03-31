@@ -49,6 +49,24 @@ func main() {
 	default:
 		fmt.Println("buang")
 	}
+
+	// looping cara pertama
+	// for i := 0; i < 3; i++ {
+	// 	fmt.Println("Angka", i)
+	// }
+
+	// looping cara kedua
+	// i := 0
+	// for i < 3 {
+	// 	fmt.Println("Angka", i)
+	// 	i++
+	// }
+
+	// looping range
+	// i := []int{1, 2, 3} // slice of integer
+	// for _, v := range i {
+	// 	fmt.Println("Angka", v)
+	// }
 }
 
 // singleParam adalah contoh function single param
