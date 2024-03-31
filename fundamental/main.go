@@ -25,4 +25,24 @@ func main() {
 
 	fmt.Printf("bool: [%t] int: [%d] float 2 angka belakang koma: [%.2f] default int: [%d]\n",
 		contohBool, contohInt, contohFloat, contohDefaultInt)
+
+	// function
+	singleParam("ibam")
+	multiParam("ibrahim", "nurandita", 30)
+	fmt.Println(multiParamWithReturn("ibrahim", "nurandita", 30))
+}
+
+// singleParam adalah contoh function single param
+func singleParam(name string) {
+	fmt.Println("halo", name)
+}
+
+// multiParam adalah contoh function multiParam param
+func multiParam(firstName, lastName string, age int) {
+	fmt.Println("halo", firstName, lastName, age)
+}
+
+// multiParamWithReturn adalah contoh function multiParam dengan return
+func multiParamWithReturn(firstName, lastName string, age int) string {
+	return fmt.Sprintf("firstName %s lastName %s age %d", firstName, lastName, age)
 }
