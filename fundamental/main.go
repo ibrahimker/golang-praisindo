@@ -30,6 +30,25 @@ func main() {
 	singleParam("ibam")
 	multiParam("ibrahim", "nurandita", 30)
 	fmt.Println(multiParamWithReturn("ibrahim", "nurandita", 30))
+
+	// conditions
+	score := 10
+	if score > 5 {
+		fmt.Println("bagus")
+	} else {
+		fmt.Println("jelek")
+	}
+
+	// conditions dengan switch
+	pakaian := "baju"
+	switch pakaian {
+	case "baju":
+		fmt.Println("masuk ke rak baju")
+	case "celana":
+		fmt.Println("masuk ke rak celana")
+	default:
+		fmt.Println("buang")
+	}
 }
 
 // singleParam adalah contoh function single param
