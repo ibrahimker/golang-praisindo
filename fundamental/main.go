@@ -67,6 +67,20 @@ func main() {
 	// for _, v := range i {
 	// 	fmt.Println("Angka", v)
 	// }
+
+	// slice
+	fruits := []string{"apel", "pisang", "jambu"}
+	fmt.Println(fruits)
+	// init slice dengan make
+	fruits2 := make([]string, 3)
+	fmt.Printf("%#v\n", fruits2)
+	fruits2[0] = "pepaya"
+	fruits2[1] = "mangga"
+	fruits2[2] = "manggis"
+	fmt.Printf("%#v\n", fruits2)
+	// append slice
+	fruits3 := append(fruits, fruits2...)
+	fmt.Printf("%#v\n", fruits3)
 }
 
 // singleParam adalah contoh function single param
