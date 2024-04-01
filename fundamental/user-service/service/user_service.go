@@ -5,7 +5,8 @@ import (
 )
 
 type UserService struct {
-	userDB []entity.User
+	userDB  []entity.User
+	userMap map[string]entity.User
 }
 
 func NewUserSvc(userDB []entity.User) *UserService {
@@ -21,4 +22,8 @@ func (u *UserService) Register(user entity.User) (entity.User, error) {
 
 func (u *UserService) GetAll() ([]entity.User, error) {
 	return u.userDB, nil
+}
+
+func (u *UserService) GetByEmail(email string) (entity.User, error) {
+	return u.userMap[email], nil
 }
