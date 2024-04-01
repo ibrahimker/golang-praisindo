@@ -3,14 +3,13 @@ package main
 import (
 	"encoding/json"
 	"net/http"
-	"strconv"
 )
 
 type Employee struct {
-	ID       int
-	Name     string
-	Age      int
-	Division string
+	ID       int    `json:"id`
+	Name     string `json:"name"`
+	Age      int    `json:"age"`
+	Division string `json:"division`
 }
 
 var employees = []Employee{
@@ -47,13 +46,21 @@ func getEmployees(w http.ResponseWriter, r *http.Request) {
 	case "GET":
 		json.NewEncoder(w).Encode(employees)
 	case "POST":
-		newEmployee := Employee{
-			ID:       len(employees) + 1,
-			Name:     r.FormValue("name"),
-			Division: r.FormValue("division"),
-		}
-		age, _ := strconv.Atoi(r.FormValue("age"))
-		newEmployee.Age = age
+		// if read from form url
+		// newEmployee := Employee{
+		// 	ID:       len(employees) + 1,
+		// 	Name:     r.FormValue("name"),
+		// 	Division: r.FormValue("division"),
+		// }
+		// age, _ := strconv.Atoi(r.FormValue("age"))
+		// newEmployee.Age = age
+
+		// if read from json
+		newEmployee := Employee{}
+		decoder := json.NewDecoder(r.Body)
+		_ = decoder.Decode(&newEmployee)
+		newEmployee.ID = len(employees) + 1
+
 		employees = append(employees, newEmployee)
 		json.NewEncoder(w).Encode(newEmployee)
 	default:
