@@ -2,15 +2,16 @@ package main
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
-	"strconv"
 )
 
 type Employee struct {
-	ID       int
-	Name     string
-	Age      int
-	Division string
+	ID       int    `json:"id`
+	Name     string `json:"name"`
+	Age      int    `json:"age"`
+	Division string `json:"division`
+	Sekolah  []string
 }
 
 var employees = []Employee{
@@ -19,6 +20,7 @@ var employees = []Employee{
 		Name:     "Airell",
 		Age:      23,
 		Division: "IT",
+		Sekolah:  []string{"SD 1", "SMP 2"},
 	},
 	{
 		ID:       2,
@@ -34,26 +36,46 @@ var employees = []Employee{
 	},
 }
 
+type ErrMessage struct {
+	Error string `json:"error"`
+}
+
 const PORT = ":8080"
 
 func main() {
-	http.HandleFunc("/employees", getEmployees)
+	http.HandleFunc("/employees", handleEmployees)
 	http.ListenAndServe(PORT, nil)
 }
 
-func getEmployees(w http.ResponseWriter, r *http.Request) {
+func handleEmployees(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	switch r.Method {
 	case "GET":
 		json.NewEncoder(w).Encode(employees)
 	case "POST":
-		newEmployee := Employee{
-			ID:       len(employees) + 1,
-			Name:     r.FormValue("name"),
-			Division: r.FormValue("division"),
+		// if read from form url
+		// newEmployee := Employee{
+		// 	ID:       len(employees) + 1,
+		// 	Name:     r.FormValue("name"),
+		// 	Division: r.FormValue("division"),
+		// }
+		// age, _ := strconv.Atoi(r.FormValue("age"))
+		// newEmployee.Age = age
+
+		// if read from json
+		newEmployee := Employee{}
+		decoder := json.NewDecoder(r.Body)
+		if err := decoder.Decode(&newEmployee); err != nil {
+			log.Println(err)
+			// data, _ := json.Marshal(ErrMessage{Error: err.Error()})
+			w.Header().Set("Content-Type", "application/json; charset=utf-8")
+			w.Header().Set("X-Content-Type-Options", "nosniff")
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(err)
+			return
 		}
-		age, _ := strconv.Atoi(r.FormValue("age"))
-		newEmployee.Age = age
+		newEmployee.ID = len(employees) + 1
+
 		employees = append(employees, newEmployee)
 		json.NewEncoder(w).Encode(newEmployee)
 	default:
