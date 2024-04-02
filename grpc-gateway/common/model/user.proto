@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package grpcgateway.model;
+
+option go_package = "github.com/ibrahimker/golang-praisindo/grpc-gateway/model";
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+service UserService {
+  rpc GetAll(google.protobuf.Empty) returns (GetAllResponse) {
+    option (google.api.http) = {
+      get : "/users",
+    };
+  }
+
+  rpc GetByEmail(GetByEmailRequest) returns (GetByEmailResponse) {
+    option (google.api.http) = {
+      get : "/users/{email}",
+    };
+  }
+
+  rpc Create(User) returns (MutationResponse) {
+    option (google.api.http) = {
+      post : "/users",
+      body : "*",
+    };
+  }
+
+  rpc Update(UpdateRequest) returns (MutationResponse) {
+    option (google.api.http) = {
+      put : "/users/{email}",
+      body : "*",
+    };
+  }
+
+  rpc Delete(DeleteRequest) returns (MutationResponse) {
+    option (google.api.http) = {
+      delete : "/users/{email}",
+    };
+  }
+}
+
+message User {
+  string username = 1;
+  string email = 2;
+  string password = 3;
+  int32 age = 4;
+}
+
+message GetAllResponse {
+  repeated User data = 1;
+}
+
+message GetAllRequest {
+  repeated User data = 1;
+}
+
+message GetByEmailRequest {
+  string email = 1;
+}
+
+message GetByEmailResponse {
+  User data = 1;
+}
+
+message MutationResponse {
+  string success = 1;
+}
+
+message UpdateRequest {
+  string email = 1;
+  string name = 2;
+}
+
+message DeleteRequest {
+  string email = 1;
+}
