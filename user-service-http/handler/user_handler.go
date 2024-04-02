@@ -15,8 +15,12 @@ type UserHandler struct {
 }
 
 type IUserHandler interface {
-	UsersHandler(w http.ResponseWriter, r *http.Request)
-	UserHandler(w http.ResponseWriter, r *http.Request)
+	GetAllUsersHandler(w http.ResponseWriter, r *http.Request)
+	CreateUserHandler(w http.ResponseWriter, r *http.Request)
+
+	GetUserByEmailHandler(w http.ResponseWriter, r *http.Request)
+	UpdateUserByEmailHandler(w http.ResponseWriter, r *http.Request)
+	DeleteUserByEmailHandler(w http.ResponseWriter, r *http.Request)
 }
 
 func NewUserHandler(userServices service.IUserService) IUserHandler {
@@ -25,30 +29,18 @@ func NewUserHandler(userServices service.IUserService) IUserHandler {
 	}
 }
 
-// UsersHandler implements IUserHandler.
-func (u *UserHandler) UsersHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	switch r.Method {
-	case http.MethodPost:
-		u.createUserHandler(w, r)
-	case http.MethodGet:
-		u.getAllUsersHandler(w, r)
-	default:
-		http.Error(w, "invalid method", http.StatusBadRequest)
-	}
-}
-
-func (u *UserHandler) getAllUsersHandler(w http.ResponseWriter, r *http.Request) {
+func (u *UserHandler) GetAllUsersHandler(w http.ResponseWriter, r *http.Request) {
 	users, err := u.userServices.GetAll()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	// print user if success
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(users)
 }
 
-func (u *UserHandler) createUserHandler(w http.ResponseWriter, r *http.Request) {
+func (u *UserHandler) CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	// read json data
 	userRequest := entity.User{}
 	decoder := json.NewDecoder(r.Body)
@@ -65,25 +57,11 @@ func (u *UserHandler) createUserHandler(w http.ResponseWriter, r *http.Request) 
 	}
 
 	// print user if success
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(user)
 }
 
-// UserHandler implements IUserHandler.
-func (u *UserHandler) UserHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	switch r.Method {
-	case http.MethodGet:
-		u.getUserByEmailHandler(w, r)
-	case http.MethodPut:
-		u.updateUserByEmailHandler(w, r)
-	case http.MethodDelete:
-		u.deleteUserByEmailHandler(w, r)
-	default:
-		http.Error(w, "invalid method", http.StatusBadRequest)
-	}
-}
-
-func (u *UserHandler) getUserByEmailHandler(w http.ResponseWriter, r *http.Request) {
+func (u *UserHandler) GetUserByEmailHandler(w http.ResponseWriter, r *http.Request) {
 	user, err := u.userServices.GetByEmail(mux.Vars(r)["email"])
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -91,10 +69,11 @@ func (u *UserHandler) getUserByEmailHandler(w http.ResponseWriter, r *http.Reque
 	}
 
 	// print user if success
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(user)
 }
 
-func (u *UserHandler) updateUserByEmailHandler(w http.ResponseWriter, r *http.Request) {
+func (u *UserHandler) UpdateUserByEmailHandler(w http.ResponseWriter, r *http.Request) {
 	// read json data
 	userRequest := entity.User{}
 	decoder := json.NewDecoder(r.Body)
@@ -112,10 +91,11 @@ func (u *UserHandler) updateUserByEmailHandler(w http.ResponseWriter, r *http.Re
 	}
 
 	// print user if success
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(user)
 }
 
-func (u *UserHandler) deleteUserByEmailHandler(w http.ResponseWriter, r *http.Request) {
+func (u *UserHandler) DeleteUserByEmailHandler(w http.ResponseWriter, r *http.Request) {
 	err := u.userServices.Delete(mux.Vars(r)["email"])
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)

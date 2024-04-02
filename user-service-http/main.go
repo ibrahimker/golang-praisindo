@@ -20,8 +20,11 @@ func main() {
 	userServices := service.NewUserSvc(userRepository)
 	userHandler := handler.NewUserHandler(userServices)
 
-	r.HandleFunc("/users", userHandler.UsersHandler)
-	r.HandleFunc("/users/{email}", userHandler.UserHandler)
+	r.HandleFunc("/users", userHandler.GetAllUsersHandler).Methods(http.MethodGet)
+	r.HandleFunc("/users", userHandler.CreateUserHandler).Methods(http.MethodPost)
+	r.HandleFunc("/users/{email}", userHandler.GetUserByEmailHandler).Methods(http.MethodGet)
+	r.HandleFunc("/users/{email}", userHandler.UpdateUserByEmailHandler).Methods(http.MethodPut)
+	r.HandleFunc("/users/{email}", userHandler.DeleteUserByEmailHandler).Methods(http.MethodDelete)
 
 	srv := &http.Server{
 		Handler: r,
