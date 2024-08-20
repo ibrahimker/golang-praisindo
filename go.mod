@@ -1,11 +1,10 @@
 module github.com/ibrahimker/golang-praisindo
 
-go 1.22.1
+go 1.23
 
 require (
 	github.com/golang/protobuf v1.5.4
 	github.com/gorilla/mux v1.8.1
-	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.1
 	github.com/lib/pq v1.10.9
 	google.golang.org/genproto/googleapis/api v0.0.0-20240125205218-1f4bbc51befe
